@@ -35,6 +35,8 @@ jobs:
       - name: Install pylint
         run: pip install pylint
 
+      - name: Resolve event hub import issue
+        run: pip install azure-eventhub
       - name: Linter Check
         run: pylint RedditProducer.py
 

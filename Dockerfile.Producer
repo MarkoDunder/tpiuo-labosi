@@ -16,4 +16,4 @@ COPY . .
 EXPOSE 8080
 
 # Command to run on container start
-CMD ["python", "RedditProducer.py"]
+CMD ["python", "reddit_producer.py"]
