@@ -32,9 +32,11 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: Linter Check
+      - name: Install pylint
         run: pip install pylint
-             pylint RedditProducer.py
+
+      - name: Linter Check
+        run: pylint RedditProducer.py
 
   azure:
     runs-on: ubuntu-latest
