@@ -3,26 +3,31 @@ from time import sleep
 from azure.eventhub import EventHubProducerClient, EventData
 import requests
 
-event_hub_connection_string = 'Endpoint=sb://markodeventhub.servicebus.windows.net/;SharedAccessKeyName=RootManageSharedAccessKey;SharedAccessKey=Wgr4VUaaDccVICrXWOQRTo2Bz+Yq+FjdG+AEhPGcaNQ='
-event_hub_name = 'mdreddithub'
+EVENT_HUB_CONNECTION_STRING = 'Endpoint=sb://markodeventhub.servicebus.windows.net/;SharedAccessKeyName=RootManageSharedAccessKey;SharedAccessKey=Wgr4VUaaDccVICrXWOQRTo2Bz+Yq+FjdG+AEhPGcaNQ='
+EVENT_HUB_NAME = 'mdreddithub'
 
-producer = EventHubProducerClient.from_connection_string(conn_str=event_hub_connection_string, eventhub_name=event_hub_name)
+producer = EventHubProducerClient.from_connection_string(
+    conn_str=EVENT_HUB_CONNECTION_STRING,
+    eventhub_name=EVENT_HUB_NAME
+)
 
 def send_to_event_hub(data):
+    """Adds a batch of event data"""
     with producer:
         batch = producer.create_batch()
         batch.add(EventData(body=json.dumps(data)))
         producer.send_batch(batch)
 
 def main():
+    """Sends data to event hub after parsing from reddit API"""
     while True:
         try:
             subreddit_url = 'https://www.reddit.com/r/dataengineering/top/.json?t=all&limit=2'
             response = requests.get(subreddit_url)
-            responseData = response.json()
-            print('Raw API Response:', responseData)
+            response_data = response.json()
+            print('Raw API Response:', response_data)
 
-            posts = responseData.get('data', {}).get('children', [])
+            posts = response_data.get('data', {}).get('children', [])
             print('Extracted Posts:', posts)
 
             for post in posts:
