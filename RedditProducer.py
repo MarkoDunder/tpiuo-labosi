@@ -1,3 +1,11 @@
+"""
+Module: RedditProducer.py
+
+This module contains the implementation of a Reddit producer.
+
+Author: Marko Dundjer
+"""
+
 import json
 from time import sleep
 from azure.eventhub import EventHubProducerClient, EventData
@@ -23,7 +31,7 @@ def main():
     while True:
         try:
             subreddit_url = 'https://www.reddit.com/r/dataengineering/top/.json?t=all&limit=2'
-            response = requests.get(subreddit_url)
+            response = requests.get(subreddit_url, timeout = 10)
             response_data = response.json()
             print('Raw API Response:', response_data)
 
@@ -36,7 +44,7 @@ def main():
                 post_data['image_url'] = image_url
                 send_to_event_hub(post_data)
             print('Data sent to Event Hub:', posts)
-        except Exception as error:
+        except requests.RequestException as error:
             print('Error fetching or sending data:', str(error))
         sleep(20000)  # 20 seconds
 
