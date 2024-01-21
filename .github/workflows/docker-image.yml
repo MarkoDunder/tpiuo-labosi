@@ -21,8 +21,9 @@ jobs:
 
       - name: Install EditorConfig Checker
         run: pip install editorconfig
+
       - name: Run Editorconfig
-        run: editorconfig
+        run: editorconfig -f .editorconfig --check --verbose
 
   linter:
     runs-on: ubuntu-latest
