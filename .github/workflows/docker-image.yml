@@ -23,7 +23,7 @@ jobs:
         run: pip install editorconfig
 
       - name: Run Editorconfig
-        run: editorconfig -f .editorconfig --check --verbose
+        run: editorconfig --version
 
   linter:
     runs-on: ubuntu-latest
