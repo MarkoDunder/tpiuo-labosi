@@ -23,7 +23,7 @@ def on_event(partition_context, event):
     try:
         # Handle the event
         body = json.loads(event.body_as_str())
-        print("Received event from partition: {}".format(partition_context.partition_id))
+        print(f"Received event from partition: {partition_context.partition_id}")
         print(f"Data: {body}")
     except ValueError as value_error:
         print("Error processing Event Hubs event:", str(value_error))
