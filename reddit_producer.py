@@ -34,7 +34,7 @@ def main():
     """Sends data to event hub after parsing from reddit API"""
     while True:
         try:
-            subreddit_url = 'https://www.reddit.com/r/dataengineering/top/.json?t=all&limit=1'
+            subreddit_url = 'https://www.reddit.com/r/dataengineering/top/.json?t=all&limit=2'
             response = requests.get(subreddit_url, timeout = 10)
             response_data = response.json()
             print('Raw API Response:', response_data)
