@@ -3,12 +3,12 @@ name: Producer Workflow
 on:
   push:
     paths:
-      - 'RedditProducer.py'
+      - 'reddit_producer.py'
     branches:
       - '*'
   pull_request:
     paths:
-      - 'RedditProducer.py'
+      - 'reddit_producer.py'
     branches:
       - '*'
 
@@ -37,8 +37,9 @@ jobs:
 
       - name: Resolve event hub import issue
         run: pip install azure-eventhub
+
       - name: Linter Check
-        run: pylint RedditProducer.py
+        run: pylint reddit_producer.py
 
   azure:
     runs-on: ubuntu-latest
