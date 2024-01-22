@@ -11,20 +11,24 @@ from time import sleep
 from azure.eventhub import EventHubProducerClient, EventData
 import requests
 
-EVENT_HUB_CONNECTION_STRING = 'Endpoint=sb://markodeventhub.servicebus.windows.net/;SharedAccessKeyName=RootManageSharedAccessKey;SharedAccessKey=Wgr4VUaaDccVICrXWOQRTo2Bz+Yq+FjdG+AEhPGcaNQ='
+EVENT_HUB_CONNECTION_STRING = (
+    'Endpoint=sb://markodeventhub.servicebus.windows.net/;'
+    'SharedAccessKeyName=RootManageSharedAccessKey;'
+    'SharedAccessKey=Wgr4VUaaDccVICrXWOQRTo2Bz+Yq+FjdG+AEhPGcaNQ='
+)
 EVENT_HUB_NAME = 'mdreddithub'
 
-producer = EventHubProducerClient.from_connection_string(
+PRODUCER = EventHubProducerClient.from_connection_string(
     conn_str=EVENT_HUB_CONNECTION_STRING,
     eventhub_name=EVENT_HUB_NAME
 )
 
 def send_to_event_hub(data):
     """Adds a batch of event data"""
-    with producer:
-        batch = producer.create_batch()
+    with PRODUCER:
+        batch = PRODUCER.create_batch()
         batch.add(EventData(body=json.dumps(data)))
-        producer.send_batch(batch)
+        PRODUCER.send_batch(batch)
 
 def main():
     """Sends data to event hub after parsing from reddit API"""
