@@ -63,7 +63,8 @@ jobs:
              docker push dataredditegistry.azurecr.io/producer:v1
              
       - name: Push Producer Image to container app
-        run: az container restart --resource-group TPIUO-labosi --name producer-ca --image dataredditegistry.azurecr.io/producer:v1 --registry-login-server dataredditegistry.azurecr.io --registry-username dataredditegistry --registry-password cBrKg4IWiQ4k4spbUF3XeyFxEmmddbRmqkDMfMjAIp+ACRBl/Utz
+        run: az container delete --resource-group TPIUO-labosi --name producer-ca --yes && 
+             az container create --resource-group TPIUO-labosi --name md-producer-ca --image dataredditegistry.azurecr.io/producer:v1 --registry-login-server dataredditegistry.azurecr.io --registry-username dataredditegistry --registry-password cBrKg4IWiQ4k4spbUF3XeyFxEmmddbRmqkDMfMjAIp+ACRBl/Utz
 
       
 
