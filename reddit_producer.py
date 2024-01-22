@@ -18,13 +18,14 @@ EVENT_HUB_CONNECTION_STRING = (
 )
 EVENT_HUB_NAME = 'mdreddithub'
 
+PRODUCER = EventHubProducerClient.from_connection_string(
+    conn_str=EVENT_HUB_CONNECTION_STRING,
+    eventhub_name=EVENT_HUB_NAME
+)
 
 def send_to_event_hub(data):
     """Adds a batch of event data"""
-    with EventHubProducerClient.from_connection_string(
-    conn_str=EVENT_HUB_CONNECTION_STRING,
-    eventhub_name=EVENT_HUB_NAME
-) as PRODUCER:
+    with PRODUCER: # pylint: disable=E1129
         batch = PRODUCER.create_batch()
         batch.add(EventData(body=json.dumps(data)))
         PRODUCER.send_batch(batch)
