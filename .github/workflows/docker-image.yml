@@ -51,7 +51,6 @@ jobs:
       - name: Login to Azure
         run: az login 
 
-
       - name: Build Docker Image
         run: docker build -t redditproducer -f Dockerfile.Producer .
 
