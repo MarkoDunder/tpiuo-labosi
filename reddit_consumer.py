@@ -1,11 +1,24 @@
+"""
+Module: RedditProducer.py
+
+This module contains the implementation of a Reddit posts consumer.
+
+Author: Marko Dundjer
+"""
+
 from azure.eventhub import EventHubConsumerClient
 import json
 
-event_hub_connection_string = 'Endpoint=sb://markodeventhub.servicebus.windows.net/;SharedAccessKeyName=RootManageSharedAccessKey;SharedAccessKey=Wgr4VUaaDccVICrXWOQRTo2Bz+Yq+FjdG+AEhPGcaNQ='
-event_hub_name = 'mdreddithub'
-consumer_group = '$Default'
+EVENT_HUB_CONNECTION_STRING = (
+    'Endpoint=sb://markodeventhub.servicebus.windows.net/;'
+    'SharedAccessKeyName=RootManageSharedAccessKey;'
+    'SharedAccessKey=Wgr4VUaaDccVICrXWOQRTo2Bz+Yq+FjdG+AEhPGcaNQ='
+)
+EVENT_HUB_NAME = 'mdreddithub'
+CONSUMER_GROUP = '$Default'
 
 def on_event(partition_context, event):
+    """ Defines what happens when consumer receives posts"""
     try:
         # Handle the event
         body = json.loads(event.body_as_str())
@@ -15,9 +28,9 @@ def on_event(partition_context, event):
         print("Error processing event:", str(e))
 
 consumer_client = EventHubConsumerClient.from_connection_string(
-    conn_str=event_hub_connection_string,
-    consumer_group=consumer_group,
-    eventhub_name=event_hub_name
+    conn_str=EVENT_HUB_CONNECTION_STRING,
+    consumer_group=CONSUMER_GROUP,
+    eventhub_name=EVENT_HUB_NAME
 )
 
 try:
