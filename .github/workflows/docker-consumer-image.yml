@@ -1,0 +1,68 @@
+name: Consumer Workflow
+
+on:
+  push:
+    paths:
+      - 'reddit_consumer.py'
+    branches:
+      - '*'
+  pull_request:
+    paths:
+      - 'reddit_consumer.py'
+    branches:
+      - '*'
+
+jobs:
+  editorconfig:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Install EditorConfig Checker
+        run: pip install editorconfig
+
+      - name: Run Editorconfig
+        run: editorconfig --version
+
+  linter:
+    runs-on: ubuntu-latest
+    needs: editorconfig
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Install pylint
+        run: pip install pylint
+
+      - name: Resolve event hub import issue
+        run: pip install azure-eventhub
+
+      - name: Linter Check
+        run: pylint reddit_consumer.py
+
+  azure:
+    runs-on: ubuntu-latest
+    needs: linter
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Login to Azure
+        run: az login
+
+      - name: Build Docker Image
+        run: docker build -t redditconsumer -f Dockerfile.Consumer .
+
+      - name: Save Docker Image
+        run: docker save -o redditconsumer.tar redditconsumer
+
+      - name: Push Producer Image to ACR
+        run: az acr login --name dataredditegistry &&
+             docker tag redditconsumer dataredditegistry.azurecr.io/consumer:v1 &&
+             docker push dataredditegistry.azurecr.io/consumer:v1
+             
+      - name: Push Producer Image to container app
+        run: az container delete --resource-group TPIUO-labosi --name consumer-ca --yes && 
+             az container create --resource-group TPIUO-labosi --name md-consumer-ca --image dataredditegistry.azurecr.io/consumer:v1 --registry-login-server dataredditegistry.azurecr.io --registry-username dataredditegistry --registry-password cBrKg4IWiQ4k4spbUF3XeyFxEmmddbRmqkDMfMjAIp+ACRBl/Utz
+
