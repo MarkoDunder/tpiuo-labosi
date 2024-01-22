@@ -6,8 +6,9 @@ This module contains the implementation of a Reddit posts consumer.
 Author: Marko Dundjer
 """
 
-from azure.eventhub import EventHubConsumerClient
 import json
+from azure.eventhub import EventHubConsumerClient
+
 
 EVENT_HUB_CONNECTION_STRING = (
     'Endpoint=sb://markodeventhub.servicebus.windows.net/;'
@@ -23,9 +24,9 @@ def on_event(partition_context, event):
         # Handle the event
         body = json.loads(event.body_as_str())
         print("Received event from partition: {}".format(partition_context.partition_id))
-        print("Data:", body)
-    except Exception as e:
-        print("Error processing event:", str(e))
+        print(f"Data: {body}")
+    except ValueError as value_error:
+        print("Error processing Event Hubs event:", str(value_error))
 
 consumer_client = EventHubConsumerClient.from_connection_string(
     conn_str=EVENT_HUB_CONNECTION_STRING,
